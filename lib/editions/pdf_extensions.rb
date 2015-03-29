@@ -118,7 +118,7 @@ class Converter
     #  end
     #  move_up image_height
     #end
-    text_fragments = text_formatter.format text_string, normalize: (normalize = (opts.delete :normalize)) != false 
+    text_fragments = text_formatter.format text_string, normalize: (normalize = (opts.delete :normalize)) != false
     text_fragments = text_fragments.map {|fragment|
       fragment[:color] ||= @font_color
       fragment
@@ -138,7 +138,7 @@ class Converter
     self.margin_bottom margin_bottom
   end
 
-  def layout_toc doc, num_levels = 2, toc_page_num = 2
+  def layout_toc doc, num_levels = 2, toc_page_num = 2, num_front_matter_pages = 0
     go_to_page toc_page_num - 1
     start_new_page
     theme_font :heading, level: 2 do
@@ -151,7 +151,7 @@ class Converter
         layout_prose %(#{(revdate.strftime '%B').upcase} #{revdate.strftime '%Y'}), margin_top: -4
       end
     end
-    
+
     # FIXME force font color to base_font_color for links
     move_down @theme.vertical_rhythm
     layout_prose 'NFJS 2014 Tour Series Schedule', margin: 0, size: @theme.base_font_size_large, anchor: 'tour-schedule', link_color: @font_color, line_height: 1
@@ -186,7 +186,11 @@ class Converter
         end
         layout_prose %(By #{authors[i]}), color: '666665', line_height: @theme.base_line_height, margin: 0, style: :italic
         indent 0, 3 do
-          layout_prose %(Page #{(section.attr 'page_start') - 1}), line_height: 1, margin: 0, style: :bold, align: :right, anchor: section.id, link_color: @font_color
+          # FIXME: RUBY WHAT ARE YOU DOING?!?!?!?
+          section_page_start = section.attr 'page_start'
+          section_page_start -= 1
+          #puts "Section: #{section_page_start}"
+          layout_prose %(Page #{section_page_start}), line_height: 1, margin: 0, style: :bold, align: :right, anchor: section.id, link_color: @font_color
         end
       end
       move_down @theme.vertical_rhythm / 2.0
@@ -287,7 +291,7 @@ Watch <link anchor="http://www.nofluffjuststuff.com/m/network/index">NFJS videos
     end
 
     grid([16.5,0],[16.5,1]).bounding_box do
-      layout_prose %(NFJS, the Magazine Issue #{doc.attr 'edition'} Copyright &#169; 2014 by No Fluff, Just Stuff (TM).
+      layout_prose %(NFJS, the Magazine Issue #{doc.attr 'edition'} Copyright &#169; 2015 by No Fluff, Just Stuff (TM).
 All Rights Reserved. Redistribution Is Strictly Prohibited.), align: :center, color: '666665', size: @theme.base_font_size_small, margin: 0, normalize: false, line_height: 1.3
     end
   end

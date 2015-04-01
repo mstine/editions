@@ -4,8 +4,12 @@ class Converter
   alias :normal_convert_paragraph :convert_paragraph
 
   def start_new_chapter sect
-    if sect.index == 3
-      import_page 'images/inserts/contegix-ad.pdf'
+    puts "SECTION INDEX: #{sect}"
+    if sect.index == 1
+      import_page 'images/inserts/pivotal-cf-ads-8.5x11.pdf'
+      start_new_page
+    elsif sect.index == 3
+      import_page 'images/inserts/thoughtworks-ad.pdf'
       start_new_page
     else
       # IMPORTANT we can't delegate to super because we are monkeypatching, not extending
@@ -154,7 +158,7 @@ class Converter
 
     # FIXME force font color to base_font_color for links
     move_down @theme.vertical_rhythm
-    layout_prose 'NFJS 2014 Tour Series Schedule', margin: 0, size: @theme.base_font_size_large, anchor: 'tour-schedule', link_color: @font_color, line_height: 1
+    layout_prose 'NFJS 2015 Tour Series Schedule', margin: 0, size: @theme.base_font_size_large, anchor: 'tour-schedule', link_color: @font_color, line_height: 1
     layout_prose 'From the Publisher', margin: 0, size: @theme.base_font_size_large, anchor: doc.sections[0].id, link_color: @font_color, line_height: 1
     move_down @theme.vertical_rhythm * 2
 
